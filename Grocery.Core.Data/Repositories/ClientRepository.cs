@@ -29,9 +29,12 @@ namespace Grocery.Core.Data.Repositories
             return client;
         }
 
-        public List<Client> GetAll()
-        {
-            return clientList;
+        public Client Create(Client newClient) {
+            newClient.Id = clientList.Max(c => c.Id) + 1;
+            clientList.Add(newClient);
+            return Get(newClient.Id) ?? newClient;
         }
+
+        public List<Client> GetAll() => clientList;
     }
 }
