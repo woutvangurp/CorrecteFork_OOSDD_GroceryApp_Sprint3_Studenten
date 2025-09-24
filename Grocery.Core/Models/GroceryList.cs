@@ -9,12 +9,14 @@ namespace Grocery.Core.Models
         [ObservableProperty]
         public string color;
 
-        public GroceryList(int id, string name, DateOnly date, string color, int clientId) : base(id, name)
+        public string Name;
+
+        public GroceryList(int id, string name, DateOnly date, string colour, int clientId) : base(id, name)
         {
             Id = id;
             Name = name;
             Date = date;
-            Color = color;
+            color = colour;
             ClientId = clientId;
         }
 
