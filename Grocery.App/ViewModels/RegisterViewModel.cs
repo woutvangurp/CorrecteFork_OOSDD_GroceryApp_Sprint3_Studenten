@@ -4,10 +4,8 @@ using CommunityToolkit.Mvvm.Input;
 using Grocery.Core.Interfaces.Services;
 using Grocery.Core.Models;
 
-namespace Grocery.App.ViewModels 
-{
-    public partial class RegisterViewModel : BaseViewModel 
-    {
+namespace Grocery.App.ViewModels {
+    public partial class RegisterViewModel : BaseViewModel {
         private readonly IAuthService _authService;
         private readonly GlobalViewModel _global;
 
@@ -29,8 +27,7 @@ namespace Grocery.App.ViewModels
         [ObservableProperty]
         private string registerMessage = "";
 
-        public RegisterViewModel(IAuthService authService, GlobalViewModel global) 
-        {
+        public RegisterViewModel(IAuthService authService, GlobalViewModel global) {
             _authService = authService;
             _global = global;
         }
@@ -43,30 +40,28 @@ namespace Grocery.App.ViewModels
         }
 
         [RelayCommand]
-        private void Register()
-        {
-            if (string.IsNullOrWhiteSpace(FirstName))
-            {
+        private void Register() {
+            if (string.IsNullOrWhiteSpace(FirstName)) {
                 RegisterMessage = "je hebt niks ingevuld voor de voornaam";
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(Password) || string.IsNullOrWhiteSpace(VerifyPassword) || password != verifyPassword)
-            {
+            if (string.IsNullOrWhiteSpace(Password) || string.IsNullOrWhiteSpace(VerifyPassword) || password != verifyPassword) {
                 RegisterMessage = "een van de wachtwoord velden is leeg of de wachtwoorden komen niet overeen";
                 return;
             }
-            //TODO: verder testen register
+
+            if (!Email.Contains("@") && !Email.Contains(".")) {
+                RegisterMessage = $"de email \'{Email}\' is niet geldig, gebruik een geldige email";
+                return;
+            }
 
             Client? authenticatedClient = _authService.Register(FirstName, LastName, Email, Password, VerifyPassword);
-            if (authenticatedClient != null) 
-            {
+            if (authenticatedClient != null) {
                 RegisterMessage = $"Welkom {authenticatedClient.name}!";
                 _global.Client = authenticatedClient;
                 Application.Current!.MainPage = new AppShell();
-            } 
-            else 
-            {
+            } else {
                 RegisterMessage = "Ongeldige gegevens.";
             }
         }
