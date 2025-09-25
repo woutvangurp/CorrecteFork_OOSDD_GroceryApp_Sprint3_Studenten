@@ -27,6 +27,14 @@ namespace Grocery.App.ViewModels
         }
 
         [RelayCommand]
+        public async void NavigateToRegister()
+        {
+            var registerViewModel = App.Current.Handler.MauiContext.Services.GetService<RegisterViewModel>();
+            var registerView = new Views.RegisterView(registerViewModel);
+            await Application.Current.MainPage.Navigation.PushModalAsync(registerView);
+        }
+
+        [RelayCommand]
         private void Login()
         {
             Client? authenticatedClient = _authService.Login(Email, Password);
