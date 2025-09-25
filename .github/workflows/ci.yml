@@ -41,22 +41,23 @@ jobs:
     if: github.event_name == 'push' || github.event_name == 'pull_request'
     
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+        
+    - name: Install MAUI workload
+      run: dotnet workload install maui
+    
+    - name: Install MAUI Android workload
+      run: dotnet workload install maui-android
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build Android app
+      run: dotnet build Grocery.App/Grocery.App.csproj -f net8.0-android --configuration Release
 
-      - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.0.x'
-
-      - name: Install MAUI workloads
-        run: dotnet workload install maui
-
-      - name: Restore dependencies
-        run: dotnet restore
-
-      - name: Build MAUI Windows app
-        run: dotnet build Grocery.App/Grocery.App.csproj --configuration Release -f net8.0-windows10.0.19041.0 /p:RuntimeIdentifierOverride=win-x64
-
-      - name: Voer unit tests uit
-        run: dotnet test --configuration Release --no-restore --no-build --verbosity normal
