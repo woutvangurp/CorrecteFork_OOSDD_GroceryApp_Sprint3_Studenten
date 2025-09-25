@@ -1,6 +1,7 @@
 ﻿using Grocery.Core.Helpers;
 using Grocery.Core.Interfaces.Services;
 using Grocery.Core.Models;
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace Grocery.Core.Services
 {
@@ -18,16 +19,20 @@ namespace Grocery.Core.Services
             if (PasswordHelper.VerifyPassword(password, client.Password)) return client;
             return null;
         }
-        public Client? Register(string firstName, string lastName, string email, string password, string verifyPassword) {
-            if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName))
+        public Client? Register(string firstName, string lastName, string email, string password, string verifyPassword)
+        {
+            if (string.IsNullOrWhiteSpace(firstName))
                 return null;
+            
+            string name = string.IsNullOrWhiteSpace(lastName) ? firstName : $"{firstName} {lastName}";
+
             if (!EmailHelper.IsValidEmail(email))
                 return null;
             if (!PasswordHelper.CheckPasswords(password, verifyPassword))
                 return null;
             Client newClient = new Client(
                 0,
-                string.Concat(firstName, " ", lastName),
+                name,
                 email,
                 PasswordHelper.HashPassword(password)
             );
