@@ -1,4 +1,4 @@
-﻿using Grocery.Core.Interfaces.Repositories;
+using Grocery.Core.Interfaces.Repositories;
 using Grocery.Core.Interfaces.Services;
 using Grocery.Core.Models;
 using System;
@@ -31,6 +31,9 @@ namespace Grocery.Core.Services
         {
             List<Client> clients = _clientRepository.GetAll();
             return clients;
+        }
+        public Client Create(Client newClient) {
+            return _clientRepository.Create(newClient);
         }
     }
 }
